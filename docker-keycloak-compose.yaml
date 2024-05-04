@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KC_HOSTNAME_ADMIN=localhost
+      - KC_METRICS_ENABLED=true
+      - KC_HEALTH_ENABLED=true
+      - KC_LOG_LEVEL=INFO
+## For development purposes, the default dev-file database is used.
+## Uncomment and update the KC_DB_* environment vars below if you wish
+## to use another database.
+#      - KC_DB=postgres
+#      - KC_DB_USERNAME=admin
+#      - KC_DB_PASSWORD=password
+#      - KC_DB_SCHEMA=public
+#      - KC_DB_URL_HOST=postgres
+#      - KC_DB_URL_DATABASE=keycloak
+    command:
+      - start-dev
+    volumes:
+      - ./var/keycloak:/opt/keycloak/data/
+## Uncomment and update the volume below to import one ore more realms
+#      - ./var/keycloak/import:/opt/keycloak/data/import
+networks:
+  default:
+    name: local-stack-network
